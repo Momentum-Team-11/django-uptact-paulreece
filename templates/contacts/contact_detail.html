@@ -42,7 +42,6 @@
       {%for note in note %}
       {% if note.contact_id == contact.id %}
       <div>{{ note.text }}</div>
-      <div>{{ note.contact_id }}</div>
       <div>{{ note.created_date }}</div>
     {% endif %}
     {% endfor %}
