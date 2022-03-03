@@ -1,13 +1,27 @@
+from gc import get_objects
+from pkgutil import get_data
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Contact
 from .forms import ContactForm
-
+from .models import Note
+from .forms import NoteForm
+from .models import ContactManager
 
 # Create your views here.
+
+
 def list_contacts(request):
     contacts = Contact.objects.all()
+    notes = Note.objects.all()
     return render(request, "contacts/list_contacts.html",
-                  {"contacts": contacts})
+                  {"contacts": contacts, "note": notes})
+
+
+def contact_detail(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    note = Note.objects.all()
+    return render(request, "contacts/contact_detail.html",
+                  {"contact": contact, "note": note})
 
 
 def add_contact(request):
@@ -20,6 +34,34 @@ def add_contact(request):
             return redirect(to='list_contacts')
 
     return render(request, "contacts/add_contact.html", {"form": form})
+
+
+def add_note(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+    if request.method == 'GET':
+        form = NoteForm()
+    else:
+
+        form = NoteForm(data=request.POST,)
+        if form.is_valid():
+            form.save()
+            return redirect(to='list_contacts')
+
+    return render(request, "contacts/add_note.html/", {"form": form, "contact": contact})
+# def add_note(request, pk):
+#     contact = get_object_or_404(Contact, pk=pk)
+#     if request.method == 'GET':
+#         form = ContactForm(instance=contact)
+#     else:
+#         form = ContactForm(data=request.POST, instance=contact)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(to='list_contacts')
+
+#     return render(request, "contacts/edit_contact.html", {
+#         "form": form,
+#         "contact": contact
+#     })
 
 
 def edit_contact(request, pk):
