@@ -4,9 +4,9 @@ from localflavor.us.models import USStateField, USZipCodeField
 from datetime import datetime
 
 
-class ContactManager(models.Manager):
-    def get_by_natural_key(self, name):
-        return self.get(name=name)
+# class ContactManager(models.Manager):
+#     def get_by_natural_key(self, name):
+#         return self.get(name=name)
 
 
 class Contact(models.Model):
@@ -27,10 +27,12 @@ class Contact(models.Model):
     zip_code = USZipCodeField(null=True, blank=True)
     birthday = models.DateField(null=True, blank=True)
 
-    objects = ContactManager()
+    # objects = ContactManager()
 
 
 class Note(models.Model):
     text = models.CharField(max_length=1000)
     created_date = models.DateTimeField(auto_now_add=datetime.now)
-    author = models.ForeignKey(Contact, null=True, on_delete=models.CASCADE)
+    author = models.CharField(max_length=20, null=True)
+    contact = models.ForeignKey(
+        Contact, on_delete=models.CASCADE, null=True, related_name="notes")

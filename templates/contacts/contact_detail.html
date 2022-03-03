@@ -40,9 +40,9 @@
         <a class="red" href="{% url 'delete_contact' pk=contact.pk %}">Delete Contact</a>
       </p>
       {%for note in note %}
-      {% if note.id == contact.id %}
+      {% if note.contact_id == contact.id %}
       <div>{{ note.text }}</div>
-      <div>{{ note.author_id }}</div>
+      <div>{{ note.contact_id }}</div>
       <div>{{ note.created_date }}</div>
     {% endif %}
     {% endfor %}
